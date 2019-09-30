@@ -20,6 +20,7 @@ var blobNameSHA256 = regexp.MustCompile("^/?(.*/)?(ac/|cas/)([a-f0-9]{64})$")
 type HTTPCache interface {
 	CacheHandler(w http.ResponseWriter, r *http.Request)
 	StatusPageHandler(w http.ResponseWriter, r *http.Request)
+	OtherStatusPageHandler(w http.ResponseWriter, r *http.Request)
 }
 
 type httpCache struct {
@@ -180,6 +181,14 @@ func (h *httpCache) StatusPageHandler(w http.ResponseWriter, r *http.Request) {
 		ServerTime: time.Now().Unix(),
 		GitCommit:  GitCommit,
 	})
+}
+
+// Produce a debugging page with some stats about the cache.
+func (h *httpCache) OtherStatusPageHandler(w http.ResponseWriter, r *http.Request) {
+	defer r.Body.Close()
+
+	w.Header().Set("Content-Type", "application/json")
+	fmt.Fprintf(w, "%s", "{\"ok\":true,\"status\":\"OK\",\"build\":\"0000000000000000000000000000000000000000\"}")
 }
 
 func path(kind cache.EntryKind, hash string) string {
