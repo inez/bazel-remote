@@ -187,7 +187,7 @@ func (h *httpCache) StatusPageHandler(w http.ResponseWriter, r *http.Request) {
 func (h *httpCache) OtherStatusPageHandler(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 	if r.ProtoMajor == 1 && r.ProtoMinor == 0 {
-		req.ProtoMinor = 1
+		r.ProtoMinor = 1
 	}
 	w.Header().Set("Content-Type", "application/json")
 	fmt.Fprintf(w, "%s", "{\"ok\":true,\"status\":\"OK\",\"build\":\"0000000000000000000000000000000000000000\"}")
